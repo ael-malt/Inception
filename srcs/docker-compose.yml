@@ -2,6 +2,7 @@ version: "3"
 
 services:
     mariadb:
+      image: mariadb
       container_name: mariadb
       networks:
       - inception
@@ -14,7 +15,9 @@ services:
       restart: unless-stopped
       expose: 
       - "3306"
+      
     nginx:
+      image: nginx
       container_name: nginx
       networks:
       - inception
@@ -29,7 +32,9 @@ services:
       ports: 
         - "443:443"
       restart: on-failure
+
     wordpress:
+      image: wordpress
       container_name: wordpress
       networks:
       - inception
