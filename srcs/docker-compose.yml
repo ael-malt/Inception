@@ -35,6 +35,8 @@ services:
 
     wordpress:
       image: wordpress
+      stdin_open: true # docker run -i
+      tty: true # docker run -t
       container_name: wordpress
       networks:
       - inception
