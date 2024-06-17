@@ -2,8 +2,6 @@ version: "3"
 
 services:
     mariadb:
-      stdin_open: true # docker run -i
-      tty: true        # docker run -t
       image: mariadb
       container_name: mariadb
       networks:
@@ -37,8 +35,6 @@ services:
 
     wordpress:
       image: wordpress
-      stdin_open: true # docker run -i
-      tty: true # docker run -t
       container_name: wordpress
       networks:
       - inception
@@ -56,12 +52,14 @@ services:
 
 volumes:
   wordpress:
+    name: wordpress
     driver: local
     driver_opts:
       type: 'none'
       o: bind
       device: '/home/ael-malt/data/wordpress'
   mariadb:
+    name: mariadb
     driver: local
     driver_opts:
       type: 'none'

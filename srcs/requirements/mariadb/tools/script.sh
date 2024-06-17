@@ -1,24 +1,18 @@
-#!/bin/bash
+#!/bin/sh
 
 service mariadb start
 
-sleep 10
+sleep 5
 
-mysql -u root -p"$DB_ROOT_PASSWORD"  << EOF
-CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
-CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
-GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
-FLUSH PRIVILEGES;
-ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
-EOF
+mysql -e "CREATE DATABASE IF NOT EXISTS ${SQL_NAME};" \
+&& mysql -e "FLUSH PRIVILEGES;" \
+&& mysql -e "CREATE USER IF NOT EXISTS '${SQL_USER}'@'%' IDENTIFIED BY '${SQL_PASSWORD}';" \
+&& mysql -e "GRANT ALL PRIVILEGES ON ${SQL_NAME}.* TO '${SQL_USER}'@'%' IDENTIFIED BY '${SQL_PASSWORD}';" \
+&& mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${SQL_ROOT_USER}'@'%' IDENTIFIED BY '${SQL_ROOT_PASSWORD}';" \
+&& mysql -e "FLUSH PRIVILEGES;" \
 
-if [ $? -eq 0 ]; then
-    echo "Database operations were successful"
-else
-    echo "Database operations failed"
-    exit 1
-fi
+sleep 1
 
-pkill -9 mariadb
+mysqladmin -u${SQL_ROOT_USER} -p${SQL_ROOT_PASSWORD} shutdown
 
-mysqld_safe 
+exec mysqld_safe
