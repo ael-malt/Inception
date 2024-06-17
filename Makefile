@@ -7,7 +7,7 @@ USER	= ael-malt
 all: 
 	sudo mkdir -p /home/$(USER)/data/wp
 	sudo mkdir -p /home/$(USER)/data/db	
-	$(DOCKER) up --build -d
+	$(DOCKER) up --build
 
 clean:
 	$(DOCKER) down -v
