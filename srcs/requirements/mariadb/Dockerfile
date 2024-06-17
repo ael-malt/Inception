@@ -1,14 +1,19 @@
 FROM debian:bullseye
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install -y mariadb-server
+EXPOSE 3306
 
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+ARG DB_NAME=${DB_NAME}
+ARG DB_USER=${DB_USER}
+ARG DB_PASSWORD=${DB_PASSWORD}
+ARG DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+
+RUN apt-get update && apt-get install \
+        mariadb-server vim -y && \
+        rm -rf /var/lib/apt/lists/*
+
+RUN rm /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d
 
 COPY tools/script.sh /etc/script.sh
-RUN chmod +x /etc/script.sh
 
-EXPOSE 3036
-
-ENTRYPOINT ["sh", "/etc/script.sh"]
+CMD ["bash", "create_user.sh"]

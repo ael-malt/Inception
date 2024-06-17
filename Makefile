@@ -1,6 +1,6 @@
 NAME = inception
 
-DOCKER = docker-compose -f ./srcs/docker-compose.yml
+DOCKER = docker compose -f ./srcs/docker-compose.yml
 
 USER	= ael-malt
 
